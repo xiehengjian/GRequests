@@ -19,7 +19,9 @@ func Get(url string, header map[string]string, params interface{}, res interface
 	if err != nil {
 		return response, err
 	}
-	err = json.NewDecoder(response.Body).Decode(res)
+	if res != nil {
+		err = json.NewDecoder(response.Body).Decode(res)
+	}
 	return response, err
 }
 
@@ -39,6 +41,8 @@ func Post(url string, header map[string]string, data interface{}, res interface{
 	if err != nil {
 		return response, err
 	}
-	err = json.NewDecoder(response.Body).Decode(res)
+	if res != nil {
+		err = json.NewDecoder(response.Body).Decode(res)
+	}
 	return response, err
 }
