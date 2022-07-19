@@ -3,6 +3,7 @@ package GRequests
 import (
 	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -42,7 +43,12 @@ func Post(url string, header map[string]string, data interface{}, res interface{
 		return response, err
 	}
 	if res != nil {
-		err = json.NewDecoder(response.Body).Decode(res)
+		// copy body
+		buf := new(bytes.Buffer)
+		buf.ReadFrom(response.Body)
+		response.Body.Close()
+		response.Body = ioutil.NopCloser(buf)
+		err = json.NewDecoder(buf).Decode(res)
 	}
 	return response, err
 }
